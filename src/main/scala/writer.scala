@@ -99,7 +99,12 @@ object writer {
       /* -------------------------------------- */
       /* Get Surface URNs */
       val surfaceUrns: Vector[Cite2Urn] = {
-        content.selectionSwitcher( dseVec, lib ) 
+        val limit: Option[Int] = {
+          val fromConf: Int = config.get("pageLimit").toInt
+          if (fromConf == 0) None
+          else Some(fromConf)
+        }
+        content.selectionSwitcher( dseVec, lib, limit ) 
       }
 
       /* Prepare the directory */

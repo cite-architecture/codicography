@@ -5,6 +5,10 @@ cexPath#cex/hmt-test.cex
 // Where to put pages
 htmlPath#facsimile_output/pages/
 
+// Limit the number of pages?
+// Values are an Integer; for all pages, use 0 as the limit 
+pageLimit#5
+
 // HTML Template files
 surfaceTemplate#templates/physical_surface.txt
 htmlTemplate#templates/html_template.txt

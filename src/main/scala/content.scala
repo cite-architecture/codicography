@@ -18,9 +18,9 @@ object content {
   /** 
    *  For selecting a function to select surfaces
   */
-  def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary ): Vector[Cite2Urn] = {
+  def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] = Some(5) ): Vector[Cite2Urn] = {
 
-      getSurfaceUrns(dseVec)
+      getSurfaceUrns(dseVec, lib, limit)
 
   }
 
@@ -33,12 +33,35 @@ object content {
 
 	}
 
+  /** Get all surfaces, in order, for a DSE Vector */
+  def getSurfaceUrns( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] ): Vector[Cite2Urn] = {
+    val colls: Vector[Cite2Urn] = {
+      dseVec.passages.map(_.surface.dropSelector).distinct
+    } 
+    val surfaceUrns: Vector[Cite2Urn] = dseVec.passages.map(_.surface).distinct
+    val cr: CiteCollectionRepository = lib.collectionRepository.get
+    val collVec: Vector[Cite2Urn] = {
+      colls.map( c => {
+        (cr ~~ c).map(_.urn)
+      }).flatten
+    }
+    // Some collection-urns may not be in DSE
+    val urnsInDse: Vector[Cite2Urn] = {
+      collVec.filter( u => {
+        surfaceUrns.contains(u)
+      })
+    }
 
+    // Limited
+    val limitedUrns = limit match {
+      case Some(i) => urnsInDse.take(i)
+      case None => urnsInDse
+    }
 
-  /** Stupid selection, for testing: grab any 3 */
-  def getSurfaceUrns( dseVec: DseVector ): Vector[Cite2Urn] = {
-    dseVec.passages.map(_.surface).distinct.take(3)
+    utilities.showMe(limitedUrns)
+    limitedUrns
   }
+
 
 	/** Returns HTML for just the text-passages on a
 	 * 	surface, grouped by text.
