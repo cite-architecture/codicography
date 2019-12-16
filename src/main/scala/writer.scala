@@ -104,7 +104,7 @@ object writer {
 
       /* Prepare the directory */
       val htmlDirPath: String = config.get("htmlPath")
-      val htmlDir: File = File(htmlDirPath)
+      val htmlDir: File = htmlDirPath.toFile.createIfNotExists(true)
       htmlDir.clear()
 
       
