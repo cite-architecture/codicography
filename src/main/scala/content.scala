@@ -142,9 +142,11 @@ object content {
       </div>
       """
 
+      val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
+
 
       // Return string 
-      imageHtml + "\n\n" + corporaHtml
+      imageHtml + between + corporaHtml
 
   }
 

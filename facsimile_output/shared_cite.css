@@ -39,6 +39,15 @@ h1 {
 	font-size: 24pt;
 }
 
+h2 {
+	font-weight: 400;
+	margin-top: 1em;
+	margin-left: 1em;
+	font-size: 16pt;
+	padding-top: 1em;
+	border-top: 1px solid silver;
+}
+
 .cts_progress {
 	width: 98%;
 	margin: 0 0 0 0.6em;
@@ -47,6 +56,10 @@ h1 {
 
 .cite_urn {
 	font-weight: 400;
+}
+
+p.cite_surfaceUrn {
+	margin-left: 1em;
 }
 
 .ohco2_commentBlock {
@@ -151,86 +164,40 @@ h1 {
   line-height: 1.3em;
 }
 
+/* Image Stuff */
+.cite_image_overview {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-end;
+	margin: 1em;
+}
+
+.cite_image_thumb {
+	flex-grow: 1;
+}
+
+.cite_image_metadata {
+	flex-grow: 3;
+	margin: 1em 0 0 2em;
+}
+
 /* CiteObj */
 
 span.citeobj_object {
 	font-size: 75%;
 }
 
-span.citeobj_propertyDef span {
-}
-
-span.citeobj_propertyDef {
-}
-
-span.cite2Urn:before {
-}
-
-span.citeobj_propertyDef span:before, span.citeobj_propertyValue span:before, span.citeobj_objLabel:before, span.citeobj_collectionLabel:before, span.citeobj_collLicense:before {
-	margin-right: 1em;
+span.citeobj_objLabel {
 	font-weight: 500;
 }
 
-span.citeobj_propertyDef {
-	margin-right: 1em;
-}
-
-span.citeobj_propertyDef > span.cite2Urn, span.citeobj_propertyValue > span.cite2Urn {
-}
-
-span.citeobj_propertyDef span, span.citeobj_propertyValue span, span.citeobj_object span span, span.citeobj_object span.citeobj_objLabel, span.citeobj_collectionDef span span, span.citeobj_collectionDef span.citeobj_collectionLabel, span.citeobj_collectionDef span.citeobj_collLicense {
-}
-
-
-
 span.citeobj_propertyDef_label {
-
-}
-
-span.citeobj_propertyDef_label:before {
-	content: "label";
-	margin-right: 1em;
+	display: none;
 }
 
 span.citeobj_propertyDef_type {
-	margin-right: 2em;
-}
-
-span.citeobj_propertyDef_type:before {
-	content: "type";
-}
-
-span.citeobj_propertyDef_vocab {
-
-}
-
-span.citeobj_propertyDef_vocab:before {
-	content: "controlled vocab";
-}
-
-span.citeobj_propertyValue_urn:before {
-	content: "urn";
-}
-
-span.citeobj_propertyValue_value:before {
-	content: "value";
+	display: none;
 }
 
 
-span.citeobj_objLabel:before {
-	content: "CITE Object";	
-	margin-right: 1em;
-}
-
-span.citeobj_collLicense:before {
-	content: "License";	
-	margin-right 1em
-}
-
-span.citeobj_collectionLabel:before {
-	content: "Collection";	
-	margin-right: 1em;
-}
-
-span.citeobj_propertyValue {
-}
