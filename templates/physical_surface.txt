@@ -1,0 +1,5 @@
+<div class="cite_facsimile_tbs">
+
+	CONTENT_HERE
+
+</div>

@@ -1,0 +1,236 @@
+html {
+	margin: 0 0 0 2em;
+	line-height: 1.3em;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16pt;
+}
+
+a {
+	text-decoration: none;
+}
+
+code {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+}
+
+a:hover { 
+	background-color: rgb(237, 237, 237);
+}
+
+header, footer {
+	font-size: 75%;
+	font-weight: 400;
+	padding: 1em;
+	background-color: rgb(237, 237, 237);
+	color: black;
+	margin: 0 1em 0 1.3em;
+}
+
+footer p {
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	font-weight: 300;
+	margin-top: 1em;
+	margin-left: 1em;
+	font-size: 24pt;
+}
+
+.cts_progress {
+	width: 98%;
+	margin: 0 0 0 0.6em;
+	display: block;
+}
+
+.cite_urn {
+	font-weight: 400;
+}
+
+.ohco2_commentBlock {
+	font-size: 85%;
+}
+
+.ohco2_commentBlock .ohco2_citableNodeContainer	{
+	margin-left: 3em;	
+}
+
+.ohco2_citableNodeContainer {
+	display: block;
+	padding: 0.5em;
+}
+
+.cite_urn {
+	color: rgb(93, 111, 180);
+	font-family: 'Roboto', sans-serif;
+}
+
+.ohco2_passageComponent {
+	font-family: 'Roboto', sans-serif;
+	font-size: 85%;
+	color: rgb(93, 111, 180);
+}
+
+
+/* Navigation Bar */
+
+.cite_facs_nav {
+	font-size: 75%;
+	margin: 1em 1.5em 1em 1.5em;
+	font-family: 'Roboto', sans-serif;
+}
+
+.cts_prev {
+	margin-right: 1em;
+}
+
+.cts_next {
+	margin-left: 1em;
+}
+
+.cite_stats {
+	margin: 0 1em 1em 1.5em;
+	font-size: 75%;
+	font-weight: 200;
+}
+
+/* CTS Catalog Entry */
+
+.ohco2_catalogEntry {
+	color: black;
+	font-weight: 300;
+	padding: 0.25em;
+	background-color: rgb(237, 237, 237);
+	margin: 1em 1em 0 1em;
+	padding: 1em;
+	clear: both;
+}
+
+.ohco2_catalogEntry_workTitle {
+	font-weight: 400;
+}
+
+.ohco2_catalogEntry_versionLabel {
+	font-weight: 300;
+}
+
+.ohco2_catalogEntry_versionLabel:before {
+	content: "(";
+}
+
+.ohco2_catalogEntry_versionLabel:after {
+	content: ")";
+}
+
+.ohco2_catalogEntry_online, .ohco2_catalogEntry_citationScheme, .ohco2_catalogEntry_lang {
+	display: none;
+}
+
+
+.ohco2_catalogEntry_groupName {
+
+}
+
+.ohco2_catalogEntry_groupName:after {
+	content: ", ";
+}
+
+/* Corpus */
+
+.ohco2_versionCorpus {
+	border: 1px solid rgb(237, 237, 237);
+	padding: 1em;
+	margin: 0 1em 1em 1em;
+}
+
+.ohco2_citableNodeText {
+	font-family: 'EB Garamond', serif;
+  font-size: 24pt;
+  line-height: 1.3em;
+}
+
+/* CiteObj */
+
+span.citeobj_object {
+	font-size: 75%;
+}
+
+span.citeobj_propertyDef span {
+}
+
+span.citeobj_propertyDef {
+}
+
+span.cite2Urn:before {
+}
+
+span.citeobj_propertyDef span:before, span.citeobj_propertyValue span:before, span.citeobj_objLabel:before, span.citeobj_collectionLabel:before, span.citeobj_collLicense:before {
+	margin-right: 1em;
+	font-weight: 500;
+}
+
+span.citeobj_propertyDef {
+	margin-right: 1em;
+}
+
+span.citeobj_propertyDef > span.cite2Urn, span.citeobj_propertyValue > span.cite2Urn {
+}
+
+span.citeobj_propertyDef span, span.citeobj_propertyValue span, span.citeobj_object span span, span.citeobj_object span.citeobj_objLabel, span.citeobj_collectionDef span span, span.citeobj_collectionDef span.citeobj_collectionLabel, span.citeobj_collectionDef span.citeobj_collLicense {
+}
+
+
+
+span.citeobj_propertyDef_label {
+
+}
+
+span.citeobj_propertyDef_label:before {
+	content: "label";
+	margin-right: 1em;
+}
+
+span.citeobj_propertyDef_type {
+	margin-right: 2em;
+}
+
+span.citeobj_propertyDef_type:before {
+	content: "type";
+}
+
+span.citeobj_propertyDef_vocab {
+
+}
+
+span.citeobj_propertyDef_vocab:before {
+	content: "controlled vocab";
+}
+
+span.citeobj_propertyValue_urn:before {
+	content: "urn";
+}
+
+span.citeobj_propertyValue_value:before {
+	content: "value";
+}
+
+
+span.citeobj_objLabel:before {
+	content: "CITE Object";	
+	margin-right: 1em;
+}
+
+span.citeobj_collLicense:before {
+	content: "License";	
+	margin-right 1em
+}
+
+span.citeobj_collectionLabel:before {
+	content: "Collection";	
+	margin-right: 1em;
+}
+
+span.citeobj_propertyValue {
+}
