@@ -137,8 +137,8 @@ object content {
       val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
       val imageHtml = s"""
       <div class="cite_image_overview">
-          <div class="cite_image_metadata">${imageMetadataHtml}</div>
           <div class="cite_image_thumb">${imageThumbHtml}</div>
+          <div class="cite_image_metadata">${imageMetadataHtml}</div>
       </div>
       """
 
