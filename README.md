@@ -13,4 +13,4 @@ A simple demo, using data from the [Homer Multitext](http://www.homermultitext.o
 - `cd` into the `codicographer` directory, 
 -  `sbt run`,
 - look at the output in directory `facsimile_output/pages`.
-
+- **This demo is currently grabbing three arbitrary text-bearing-surfaces.**
