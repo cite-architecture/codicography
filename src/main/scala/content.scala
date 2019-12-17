@@ -15,23 +15,18 @@ import scala.io.Source
 
 object content {
 
-  /** 
-   *  For selecting a function to select surfaces
-  */
+
+  /** For selecting a function to select surfaces */
   def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] = Some(5) ): Vector[Cite2Urn] = {
-
       getSurfaceUrns(dseVec, lib, limit)
-
   }
 
-	/** 
-	 *  For selecting a function to attach content to each surface
-	*/
+
+	/** For selecting a function to attach content to each surface */
 	def contentSwitcher( surfaceUrn: Cite2Urn, lib: CiteLibrary, config: Map[String, String] ): String = {
-
-			textAndThumb(surfaceUrn, lib, config)
-
+			htmlPageTextAndOverviewImage(surfaceUrn, lib, config)
 	}
+
 
   /** Get all surfaces, in order, for a DSE Vector */
   def getSurfaceUrns( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] ): Vector[Cite2Urn] = {
@@ -64,53 +59,52 @@ object content {
 
 
 	/** Returns HTML for just the text-passages on a
-	 * 	surface, grouped by text.
-	 */
-	def basicTexts(
+	 * 	surface, grouped by text. */
+	def htmlPageBasicTexts(
     surfaceUrn: Cite2Urn, 
     lib: CiteLibrary,
     config: Map[String, String]
   ): String = {
 
-			// Get things where we can reach them
-      val tr: TextRepository = lib.textRepository.get
-      val corp: Corpus = tr.corpus
-      val cat: Catalog = tr.catalog
-      val colls: CiteCollectionRepository = lib.collectionRepository.get
-      val rels: CiteRelationSet = lib.relationSet.get
-      val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+    // Get things where we can reach them
+    val tr: TextRepository = lib.textRepository.get
+    val corp: Corpus = tr.corpus
+    val cat: Catalog = tr.catalog
+    val colls: CiteCollectionRepository = lib.collectionRepository.get
+    val rels: CiteRelationSet = lib.relationSet.get
+    val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
 
-       				
+	  val surfaceTexts: Vector[Corpus] = getTextCorporaForSurface(surfaceUrn, lib, config)
 
-      val surfaceObj: CiteObject = colls.citableObject(surfaceUrn)
-      val surfaceLabel: String = surfaceObj.label
-      println(s"\n------\nWorking on ${surfaceUrn}\n------")
-      println("\tGetting text urns…")
-      val textUrns: Vector[CtsUrn] = dseVec.textsForTbs(surfaceUrn)
-      println("\tsorting text urns…")
-      val sortedUrns: Vector[CtsUrn] = corp.sortPassages(textUrns)
-      println("\ttwiddling text urns…")
-      val textCorpus: Corpus = corp ~~ sortedUrns
-      println("\tgrouping by text…")
-      val byText: Vector[Corpus] = HtmlWriter.groupCorpusByText(textCorpus)
-      val corporaHtml: String = {
-        byText.map( t => {
-       		val catHtml: String = {
-       			val catEntry: CatalogEntry = {
-       				val textU: CtsUrn = t.urns.head.dropPassage
-       				cat.texts.filter(_.urn == textU).head
-       			}
-       			HtmlWriter.writeCtsCatalogEntry(catEntry)	
-       		} 	
-          val corpHtml: String = HtmlWriter.writeCorpus(t)
-          Vector(catHtml, corpHtml).mkString("\n")
-        }).mkString("\n\n")
-      }
-      print("\t…done.")
-      corporaHtml
+    // Write HTML
+    val corporaHtml: String = {
+      surfaceTexts.map( t => {
+     		val catHtml: String = {
+     			val catEntry: CatalogEntry = {
+     				val textU: CtsUrn = t.urns.head.dropPassage
+     				cat.texts.filter(_.urn == textU).head
+     			}
+     			HtmlWriter.writeCtsCatalogEntry(catEntry)	
+     		} 	
+        val corpHtml: String = HtmlWriter.writeCorpus(t)
+        Vector(catHtml, corpHtml).mkString("\n")
+      }).mkString("\n\n")
+    }
+    print("\t…done.")
+    corporaHtml
   }
 
-  def textAndThumb(
+
+  /** Returns HTML for the text-passages on a TBS, 
+   *  sorted by Text, working from a Vector[Corpus],
+   *  with each passage accompanied by an ImageROI.
+   */
+  
+
+
+  /** For a TBS, return HTML showing an overview image of the whole 
+   *  surface, and all texts on that surface. */
+  def htmlPageTextAndOverviewImage(
     surfaceUrn: Cite2Urn, 
     lib: CiteLibrary,
     config: Map[String, String]
@@ -120,58 +114,158 @@ object content {
       val tr: TextRepository = lib.textRepository.get
       val corp: Corpus = tr.corpus
       val cat: Catalog = tr.catalog
-    val colls: CiteCollectionRepository = lib.collectionRepository.get
+      val colls: CiteCollectionRepository = lib.collectionRepository.get
       val rels: CiteRelationSet = lib.relationSet.get
       val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
 
       // Get texts
-      val corporaHtml: String = basicTexts(surfaceUrn, lib, config)
+      val corporaHtml: String = htmlPageBasicTexts(surfaceUrn, lib, config)
 
       // Get one image URN for this page 
       val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
 
       // Get image
-          // binary image model urn
-      val bim = Cite2Urn("urn:cite2:hmt:binaryimg.v1:") 
-          // get objects
-      val bimObjs: Vector[CiteObject] = colls ~~ bim
-      val bimCollProperty: Cite2Urn = bim.addProperty("collection")
-      val bimProtocolProperty: Cite2Urn = bim.addProperty("protocol")
-      val matchingBimObject: CiteObject = {
-        bimObjs.filter( c => { 
-          c.propertyValue(bimCollProperty) == imageUrn.dropSelector 
-        }).filter( c => {
-          c.propertyValue(bimProtocolProperty) == "iiifApi"
-        }).head
-      }
-
-      val pathPropUrn: Cite2Urn  = matchingBimObject.urn.addProperty("path")
-      val path: String = matchingBimObject.propertyValue(pathPropUrn).asInstanceOf[String]
-      val urlPropUrn: Cite2Urn = matchingBimObject.urn.addProperty("url")
-      val url: String = matchingBimObject.propertyValue(urlPropUrn).asInstanceOf[String]
-      val imgService =  IIIFApi(url, path)
-      val imageViewerUrl:String = config("imageViewerUrl")
-      val overviewWidth: Int = config("imageOverviewWidth").toInt
-      val imageThumbHtml: String = imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
-
-      // Get image metadata
-      val imgObj = (colls ~~ imageUrn).head
-      val imgCat = (colls.catalog ~~ imageUrn).collections.head
-      val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
-      val imageHtml = s"""
-      <div class="cite_image_overview">
-          <div class="cite_image_thumb">${imageThumbHtml}</div>
-          <div class="cite_image_metadata">${imageMetadataHtml}</div>
-      </div>
-      """
+      val imageHtml = getOverviewImageHtml(surfaceUrn, lib, config)
 
       val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
 
+      // Return string 
+      imageHtml + between + corporaHtml
+  }
+
+
+  /** Delivers a thumbnail overview image of the surface,
+   *  and for each passage of text, the transcription
+    * and the image-roi.
+   */
+  def htmlPageOverviewTextsRois(
+    surfaceUrn: Cite2Urn, 
+    lib: CiteLibrary,
+    config: Map[String, String]
+  ): String = {
+
+      // Get things where we can reach them
+      val tr: TextRepository = lib.textRepository.get
+      val corp: Corpus = tr.corpus
+      val cat: Catalog = tr.catalog
+      val colls: CiteCollectionRepository = lib.collectionRepository.get
+      val rels: CiteRelationSet = lib.relationSet.get
+      val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
+      // Get one image URN for this page 
+      val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
+
+      // Get image
+      val imageHtml = getOverviewImageHtml(surfaceUrn, lib, config)
+
+      // dividing overview image from text-passages
+      val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
+
+      // text and image-rois
+      val corporaHtml: String = "texts here."
 
       // Return string 
       imageHtml + between + corporaHtml
-
   }
+
+
+  /** Get HTML for an overview image thumbnail for a TBS, with its caption */
+  def getOverviewImageHtml(
+      surfaceUrn: Cite2Urn, 
+      lib: CiteLibrary,
+      config: Map[String, String]
+    ): String = {
+
+    // Get things where we can reach them
+    val tr: TextRepository = lib.textRepository.get
+    val corp: Corpus = tr.corpus
+    val cat: Catalog = tr.catalog
+    val colls: CiteCollectionRepository = lib.collectionRepository.get
+    val rels: CiteRelationSet = lib.relationSet.get
+    val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
+    // Get one image URN for this page 
+    val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
+
+    // Get image
+        // binary image model urn
+    val bim = Cite2Urn("urn:cite2:hmt:binaryimg.v1:") 
+        // get objects
+    val bimObjs: Vector[CiteObject] = colls ~~ bim
+    val bimCollProperty: Cite2Urn = bim.addProperty("collection")
+    val bimProtocolProperty: Cite2Urn = bim.addProperty("protocol")
+    val matchingBimObject: CiteObject = {
+      bimObjs.filter( c => { 
+        c.propertyValue(bimCollProperty) == imageUrn.dropSelector 
+      }).filter( c => {
+        c.propertyValue(bimProtocolProperty) == "iiifApi"
+      }).head
+    }
+
+    val pathPropUrn: Cite2Urn  = matchingBimObject.urn.addProperty("path")
+    val path: String = matchingBimObject.propertyValue(pathPropUrn).asInstanceOf[String]
+    val urlPropUrn: Cite2Urn = matchingBimObject.urn.addProperty("url")
+    val url: String = matchingBimObject.propertyValue(urlPropUrn).asInstanceOf[String]
+    val imgService =  IIIFApi(url, path)
+    val imageViewerUrl:String = config("imageViewerUrl")
+    // how high the image resolution should be
+    val overviewWidth: Int = config("imageResolution").toInt
+    val imageThumbHtml: String = imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
+
+    // Get image metadata
+    val imgObj = (colls ~~ imageUrn).head
+    val imgCat = (colls.catalog ~~ imageUrn).collections.head
+    val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
+    val imageHtml = s"""
+    <div class="cite_image_overview">
+        <div class="cite_image_thumb">${imageThumbHtml}</div>
+        <div class="cite_image_/data">${imageMetadataHtml}</div>
+    </div>
+    """
+    imageHtml
+  }
+
+  /** Return a Vector[Corpus] containing the text-passages
+   *  appearing on a Text-Bearing-Surface, grouped by Text.
+   *  This will be the basis for subsequent processing.
+   */
+  def getTextCorporaForSurface(
+    surfaceUrn: Cite2Urn, 
+    lib: CiteLibrary,
+    config: Map[String, String]
+  ): Vector[Corpus] = {
+      // Get things where we can reach them
+      val tr: TextRepository = lib.textRepository.get
+      val corp: Corpus = tr.corpus
+      val cat: Catalog = tr.catalog
+      val colls: CiteCollectionRepository = lib.collectionRepository.get
+      val rels: CiteRelationSet = lib.relationSet.get
+      val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
+      // Get the specific surface as a CITE Object
+      val surfaceObj: CiteObject = colls.citableObject(surfaceUrn)
+      val surfaceLabel: String = surfaceObj.label
+      println(s"\n------\nWorking on ${surfaceUrn}\n------")
+      println("\tGetting text urns…")
+
+      // What passages are on it?
+      val textUrns: Vector[CtsUrn] = dseVec.textsForTbs(surfaceUrn)
+      println("\tsorting text urns…")
+
+      // Sort the URNs in document order
+      val sortedUrns: Vector[CtsUrn] = corp.sortPassages(textUrns)
+
+      // Get the text passages
+      println("\ttwiddling text urns…")
+      val textCorpus: Corpus = corp ~~ sortedUrns
+
+      // Group by text
+      println("\tgrouping by text…")
+      val byText: Vector[Corpus] = HtmlWriter.groupCorpusByText(textCorpus)
+
+      byText
+  }
+
 
 }
 

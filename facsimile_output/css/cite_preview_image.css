@@ -1,0 +1,31 @@
+
+img {
+    max-width: 600px;
+    max-height: 600px;
+}
+
+.cite_preview_image {
+    display:inline-block;
+    position: relative;
+}
+
+/* magnifying glass icon */
+.cite_preview_image:after {
+    content:'';
+    display:block; 
+    width:33px; 
+    height:33px; 
+    position:absolute; 
+    top:0;
+    right:0;
+    background:url(images/icon.png);
+}
+
+.cite_preview_image img {
+    display: block;
+}
+
+.cite_preview_image img::selection { background-color: transparent; }
+
+.cite_preview_image img:hover { cursor: url(grab.cur), default; }
+.cite_preview_image img:active { cursor: url(grabbed.cur), default; }

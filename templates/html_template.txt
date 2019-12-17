@@ -7,7 +7,7 @@
 </head>
 
 <body>
-	<header>CITE Facsimile</header>	
+	<!-- <header>CITE Facsimile</header> -->
 
 	<h1> LABEL_HERE </h1>	
 

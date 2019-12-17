@@ -165,6 +165,11 @@ p.cite_surfaceUrn {
 }
 
 /* Image Stuff */
+
+.cite_image_overview .cite_image_thumb {
+	max-width: 600px;
+	margin: 0 1em 0 0;
+}
 .cite_image_overview {
 	display: flex;
 	flex-direction: row;
@@ -174,11 +179,14 @@ p.cite_surfaceUrn {
 }
 
 .cite_image_thumb {
-	flex-grow: 1;
+	flex-grow: 3;
+}
+
+.cite_image_thumb img {
 }
 
 .cite_image_metadata {
-	flex-grow: 3;
+	flex-grow: 1;
 	margin: 1em 0 0 2em;
 }
 
