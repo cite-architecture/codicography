@@ -137,7 +137,6 @@ object content {
 
         val nodes: Vector[CitableNode] = t.nodes
 
-        println("\t\tDoing nodeImage…")
         val nodeImage: Vector[ (CitableNode, Option[Cite2Urn]) ] = {
           nodes.map( n => {
             val imageForText: Option[Cite2Urn] = {
@@ -161,7 +160,6 @@ object content {
         (catEntry, nodeImage)
       })
     }
-    println("\t\t…done doing nodeImage…")
 
      //nodesAndImages: Vector[ (CatalogEntry, Vector[ (CitableNode, Option[Cite2Urn]) ] )]
     val returnHtml: String = nodesAndImages.map( ni => {
@@ -185,6 +183,7 @@ object content {
         val imageOpenHtml = {
           cn._2 match {
             case Some(u) => {
+              println(s"\t\t\tDoing getDSEImage for ${u}")
               getDSEImage(u, lib, config)
             }
             case None => {
@@ -265,9 +264,8 @@ object content {
       val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
 
       // text and image-rois
-      println("\tGetting text and ROIs…")
+      println(s"\tGetting text and ROIs for ${surfaceUrn}…")
       val corporaHtml: String = htmlTextAndROIs(surfaceUrn, lib, config)
-      println("\t…done getting text and ROIs.")
 
       // Return string 
       imageHtml + between + corporaHtml
@@ -282,9 +280,7 @@ object content {
       config: Map[String, String]
   ): String = {
     // Get things where we can reach them
-    val tr: TextRepository = lib.textRepository.get
-    val corp: Corpus = tr.corpus
-    val cat: Catalog = tr.catalog
+    val cr: CiteCollectionRepository = lib.collectionRepository.get
     val colls: CiteCollectionRepository = lib.collectionRepository.get
     val rels: CiteRelationSet = lib.relationSet.get
     val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
@@ -315,7 +311,8 @@ object content {
     val imageThumbHtml: String = imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
 
     // Get image metadata
-    val imgObj = (colls ~~ imageUrn).head
+    //val imgObj = (colls ~~ imageUrn).head
+    val imgObj = cr.objects.objectMap(imageUrn.dropExtensions)
     val imgCat = (colls.catalog ~~ imageUrn).collections.head
     val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
     val imageHtml = s"""
@@ -407,15 +404,10 @@ object content {
       // Get the specific surface as a CITE Object
       val surfaceObj: CiteObject = colls.citableObject(surfaceUrn)
       val surfaceLabel: String = surfaceObj.label
-      println(s"\n------\nWorking on ${surfaceUrn}\n------")
       println("\tGetting text urns…")
 
       // What passages are on it?
       val textUrns: Vector[CtsUrn] = dseVec.textsForTbs(surfaceUrn)
-      //println("\tsorting text urns…")
-
-      // Sort the URNs in document order
-      //val sortedUrns: Vector[CtsUrn] = corp.sortPassages(textUrns)
 
       // Get the text passages
       println("\ttwiddling text urns…")
@@ -425,7 +417,6 @@ object content {
       // Group by text
       println("\tgrouping by text…")
       val byText: Vector[Corpus] = HtmlWriter.groupCorpusByText(textCorpus)
-      println("\t…done.")
       byText
   }
 
