@@ -137,6 +137,7 @@ object content {
 
         val nodes: Vector[CitableNode] = t.nodes
 
+        println("\t\tDoing nodeImage…")
         val nodeImage: Vector[ (CitableNode, Option[Cite2Urn]) ] = {
           nodes.map( n => {
             val imageForText: Option[Cite2Urn] = {
@@ -160,6 +161,7 @@ object content {
         (catEntry, nodeImage)
       })
     }
+    println("\t\t…done doing nodeImage…")
 
      //nodesAndImages: Vector[ (CatalogEntry, Vector[ (CitableNode, Option[Cite2Urn]) ] )]
     val returnHtml: String = nodesAndImages.map( ni => {
@@ -263,7 +265,9 @@ object content {
       val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
 
       // text and image-rois
+      println("\tGetting text and ROIs…")
       val corporaHtml: String = htmlTextAndROIs(surfaceUrn, lib, config)
+      println("\t…done getting text and ROIs.")
 
       // Return string 
       imageHtml + between + corporaHtml
@@ -421,7 +425,7 @@ object content {
       // Group by text
       println("\tgrouping by text…")
       val byText: Vector[Corpus] = HtmlWriter.groupCorpusByText(textCorpus)
-      println("\n…done.")
+      println("\t…done.")
       byText
   }
 
