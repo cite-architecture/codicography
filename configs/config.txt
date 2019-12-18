@@ -7,7 +7,7 @@ htmlPath#facsimile_output/pages/
 
 // Limit the number of pages?
 // Values are an Integer; for all pages, use 0 as the limit 
-pageLimit#5
+pageLimit#3
 
 // HTML Template files
 surfaceTemplate#templates/physical_surface.txt
@@ -17,4 +17,4 @@ jsTemplate#templates/js_template.txt
 
 // ImageStuff
 imageViewerUrl#http://www.homermultitext.org/ict2/index.html?urn=
-imageResolution#2000
+imageResolution#3000

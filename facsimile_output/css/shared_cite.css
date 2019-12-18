@@ -167,7 +167,7 @@ p.cite_surfaceUrn {
 /* Image Stuff */
 
 .cite_image_overview .cite_image_thumb {
-	max-width: 600px;
+	max-width: 900px;
 	margin: 0 1em 0 0;
 }
 .cite_image_overview {
@@ -192,6 +192,10 @@ p.cite_surfaceUrn {
 
 p.cite_no_image_found, p.cite_image_found {
   margin-left: 1em;
+}
+
+.cite_image_dseimage {
+	margin-left: 6px;
 }
 
 /* CiteObj */
