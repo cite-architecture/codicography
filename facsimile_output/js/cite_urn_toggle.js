@@ -21,15 +21,6 @@ $(document).ready(function () {
 	$(".tooltip").append("<div class='top'><p>double-click to expand</p><i></i></div>");
 
 
-/*
-<div class="btn btn-primary tooltip">Hover Me to Preview
-    <div class="top">
-        <h3>Lorem Ipsum</h3>
-        <p>Dolor sit amet, consectetur adipiscing elit.</p>
-        <i></i>
-    </div>
-</div>
-*/
 
 	$(".ctsurn").dblclick(function(){ 
 		var urnString = $(this).attr("data-ctsurn");
