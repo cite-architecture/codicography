@@ -190,6 +190,10 @@ p.cite_surfaceUrn {
 	margin: 1em 0 0 2em;
 }
 
+p.cite_no_image_found, p.cite_image_found {
+  margin-left: 1em;
+}
+
 /* CiteObj */
 
 span.citeobj_object {

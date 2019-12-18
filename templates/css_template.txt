@@ -1,5 +1,6 @@
   <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Roboto:100,200,300,400,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/cite_urn_toggle.css">
 	<link rel="stylesheet" href="../css/shared_cite.css">
+	<link rel="stylesheet" href="../css/cite_showhide.css">
 	<link rel="stylesheet" href="../css/cite_preview_image.css">
 

@@ -3,3 +3,5 @@
   <script type="text/javascript" src="../js/cite_urn_toggle.js"></script>
   <script type="text/javascript" src="../js/jquery.zoom.min.js"></script>
   <script type="text/javascript" src="../js/cite_preview_image.js"></script>
+	<script type="text/javascript" src="../js/cite_showhide.js"></script>
+

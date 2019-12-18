@@ -1,6 +1,6 @@
 # Codicography
 
-**v.0.3.0**
+**v.1.0.0**
 
 A Scala Library, using the [CITE Architecture](http://cite-architecture.org) to generate static web views of text-bearing artifacts (like manuscripts, codices, and inscriptions).
 
@@ -8,7 +8,7 @@ A Scala Library, using the [CITE Architecture](http://cite-architecture.org) to 
 
 ## Running
 
-A simple demo, using data from the [Homer Multitext](http://www.homermultitext.org) is:
+A simple demo, creating five pages using data from the [Homer Multitext](http://www.homermultitext.org) is:
 
 - `cd` into the `codicographer` directory, 
 -  `sbt run`,

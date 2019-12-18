@@ -22,10 +22,18 @@ object content {
   }
 
 
-	/** For selecting a function to attach content to each surface */
+
+
+	/** For selecting a function to attach content to each surface
+   *  Options
+   *  htmlPageBasicTexts : Just texts for surface
+   *  htmlPageTextAndOverviewImage : Texts and a single overview image
+   *  htmlPageOverviewTextsRois : Texts, rois, and overview
+   */
 	def contentSwitcher( surfaceUrn: Cite2Urn, lib: CiteLibrary, config: Map[String, String] ): String = {
-			htmlPageTextAndOverviewImage(surfaceUrn, lib, config)
+			htmlPageOverviewTextsRois(surfaceUrn, lib, config)
 	}
+
 
 
   /** Get all surfaces, in order, for a DSE Vector */
@@ -56,6 +64,7 @@ object content {
     utilities.showMe(limitedUrns)
     limitedUrns
   }
+
 
 
 	/** Returns HTML for just the text-passages on a
@@ -95,11 +104,101 @@ object content {
   }
 
 
+
   /** Returns HTML for the text-passages on a TBS, 
    *  sorted by Text, working from a Vector[Corpus],
    *  with each passage accompanied by an ImageROI.
    */
-  
+  def htmlTextAndROIs(
+    surfaceUrn: Cite2Urn, 
+    lib: CiteLibrary,
+    config: Map[String, String]
+  ): String = {
+
+    // Get things where we can reach them
+    val tr: TextRepository = lib.textRepository.get
+    val corp: Corpus = tr.corpus
+    val cat: Catalog = tr.catalog
+    val colls: CiteCollectionRepository = lib.collectionRepository.get
+    val rels: CiteRelationSet = lib.relationSet.get
+    val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
+    // Get texts
+    val surfaceTexts: Vector[Corpus] = getTextCorporaForSurface(surfaceUrn, lib, config)
+
+    // Get images for each text-node
+    val nodesAndImages: Vector[ (CatalogEntry, Vector[ (CitableNode, Option[Cite2Urn]) ] )] = {
+      surfaceTexts.map( t => {
+
+        val catEntry: CatalogEntry = {
+          val textU: CtsUrn = t.urns.head.dropPassage
+          cat.texts.filter(_.urn == textU).head
+        }
+
+        val nodes: Vector[CitableNode] = t.nodes
+
+        val nodeImage: Vector[ (CitableNode, Option[Cite2Urn]) ] = {
+          nodes.map( n => {
+            val imageForText: Option[Cite2Urn] = {
+              try {
+                val thisImage: Cite2Urn = dseVec.imageWRoiForText(n.urn)
+                Some(thisImage)
+              } catch {
+                  case e: Exception => {
+                    try {
+                      val thisImage: Cite2Urn = dseVec.imageWRoiForText(n.urn.collapsePassageBy(1))
+                      Some(thisImage)
+                    } catch {
+                      case e: Exception => None
+                    }
+                  }
+              }
+            }
+            (n, imageForText)
+          })
+        }
+        (catEntry, nodeImage)
+      })
+    }
+
+     //nodesAndImages: Vector[ (CatalogEntry, Vector[ (CitableNode, Option[Cite2Urn]) ] )]
+    val returnHtml: String = nodesAndImages.map( ni => {
+      // write catalog entry
+      val catHtml = HtmlWriter.writeCtsCatalogEntry(ni._1)
+
+      // Open the Corpus
+      val corpHtmlOpen = """<div class="ohco2_versionCorpus">"""
+      val corpHtmlClose = """</div>"""
+
+      // for each Node+Image pair…      
+      val nodesHtml:String = ni._2.map( cn => {
+        // Set up showHide
+        val openHtml = """<div class="cite_showhide_header cite_showhide_closed">"""
+        // Get the node HTML
+        val nodeHtml = HtmlWriter.writeCitableNode(cn._1)
+        val closeHtml = """</div>"""
+        // Wrap up the node
+        val nodeContainerHtml = openHtml + "\n" + nodeHtml + "\n" + closeHtml
+        //Get the image HTML
+        val imageOpenHtml = {
+          cn._2 match {
+            case Some(u) => {
+              getDSEImage(u, lib, config)
+            }
+            case None => {
+              s"""<p class="cite_no_image_found">No image for ${HtmlWriter.writeUrn(cn._1.urn)}</p>"""
+            }
+          }
+        }
+        nodeContainerHtml + "\n" + imageOpenHtml
+      }).mkString("\n")
+      val htmlVec = Vector(catHtml, corpHtmlOpen, nodesHtml, corpHtmlClose)
+      htmlVec.mkString("\n")
+    }).mkString("\n")
+    returnHtml
+  }
+
+
 
 
   /** For a TBS, return HTML showing an overview image of the whole 
@@ -134,6 +233,8 @@ object content {
   }
 
 
+
+
   /** Delivers a thumbnail overview image of the surface,
    *  and for each passage of text, the transcription
     * and the image-roi.
@@ -162,11 +263,66 @@ object content {
       val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
 
       // text and image-rois
-      val corporaHtml: String = "texts here."
+      val corporaHtml: String = htmlTextAndROIs(surfaceUrn, lib, config)
 
       // Return string 
       imageHtml + between + corporaHtml
   }
+
+
+
+  /** Get HTML for a DSE image, with its caption */
+  def getDSEImage(
+      imageUrn: Cite2Urn, 
+      lib: CiteLibrary,
+      config: Map[String, String]
+  ): String = {
+    // Get things where we can reach them
+    val tr: TextRepository = lib.textRepository.get
+    val corp: Corpus = tr.corpus
+    val cat: Catalog = tr.catalog
+    val colls: CiteCollectionRepository = lib.collectionRepository.get
+    val rels: CiteRelationSet = lib.relationSet.get
+    val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
+    // Get image
+        // binary image model urn
+    val bim = Cite2Urn("urn:cite2:hmt:binaryimg.v1:") 
+        // get objects
+    val bimObjs: Vector[CiteObject] = colls ~~ bim
+    val bimCollProperty: Cite2Urn = bim.addProperty("collection")
+    val bimProtocolProperty: Cite2Urn = bim.addProperty("protocol")
+    val matchingBimObject: CiteObject = {
+      bimObjs.filter( c => { 
+        c.propertyValue(bimCollProperty) == imageUrn.dropSelector 
+      }).filter( c => {
+        c.propertyValue(bimProtocolProperty) == "iiifApi"
+      }).head
+    }
+
+    val pathPropUrn: Cite2Urn  = matchingBimObject.urn.addProperty("path")
+    val path: String = matchingBimObject.propertyValue(pathPropUrn).asInstanceOf[String]
+    val urlPropUrn: Cite2Urn = matchingBimObject.urn.addProperty("url")
+    val url: String = matchingBimObject.propertyValue(urlPropUrn).asInstanceOf[String]
+    val imgService =  IIIFApi(url, path)
+    val imageViewerUrl:String = config("imageViewerUrl")
+    // how high the image resolution should be
+    val overviewWidth: Int = config("imageResolution").toInt
+    val imageThumbHtml: String = imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
+
+    // Get image metadata
+    val imgObj = (colls ~~ imageUrn).head
+    val imgCat = (colls.catalog ~~ imageUrn).collections.head
+    val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
+    val imageHtml = s"""
+    <div class="cite_image_dseimage">
+        <div class="cite_image_thumb">${imageThumbHtml}</div>
+        <div class="cite_image_data">${imageMetadataHtml}</div>
+    </div>
+    """
+    imageHtml
+  }
+
 
 
   /** Get HTML for an overview image thumbnail for a TBS, with its caption */
@@ -225,6 +381,8 @@ object content {
     imageHtml
   }
 
+
+
   /** Return a Vector[Corpus] containing the text-passages
    *  appearing on a Text-Bearing-Surface, grouped by Text.
    *  This will be the basis for subsequent processing.
@@ -250,19 +408,20 @@ object content {
 
       // What passages are on it?
       val textUrns: Vector[CtsUrn] = dseVec.textsForTbs(surfaceUrn)
-      println("\tsorting text urns…")
+      //println("\tsorting text urns…")
 
       // Sort the URNs in document order
-      val sortedUrns: Vector[CtsUrn] = corp.sortPassages(textUrns)
+      //val sortedUrns: Vector[CtsUrn] = corp.sortPassages(textUrns)
 
       // Get the text passages
       println("\ttwiddling text urns…")
-      val textCorpus: Corpus = corp ~~ sortedUrns
+      //val textCorpus: Corpus = corp ~~ sortedUrns
+      val textCorpus: Corpus = corp ~~ textUrns
 
       // Group by text
       println("\tgrouping by text…")
       val byText: Vector[Corpus] = HtmlWriter.groupCorpusByText(textCorpus)
-
+      println("\n…done.")
       byText
   }
 

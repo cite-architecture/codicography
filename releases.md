@@ -1,5 +1,7 @@
 # `codicology`: release notes
 
+**1.0.0**: Image regions-of-interest attached to text-passages.
+
 **0.3.0**: Zoom-on-hover for overview images. Minor CSS tweaks. Major re-naming and refactoring of code.
 
 **0.2.0**: Added configurable page-limit. CSS improvements.
