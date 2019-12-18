@@ -4,6 +4,8 @@
 
 A Scala Library, using the [CITE Architecture](http://cite-architecture.org) to generate static web views of text-bearing artifacts (like manuscripts, codices, and inscriptions).
 
+The generated pages have been tested on Safari, Chrome, and Firefox.
+
 **Status**: active development (see releases.md)
 
 ## Running
