@@ -1,5 +1,7 @@
 # `codicology`: release notes
 
+**1.0.1**: Speed up finding images for passages of text.
+
 **1.0.0**: Image regions-of-interest attached to text-passages.
 
 **0.3.0**: Zoom-on-hover for overview images. Minor CSS tweaks. Major re-naming and refactoring of code.
