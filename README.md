@@ -14,6 +14,6 @@ A simple demo, creating five pages using data from the [Homer Multitext](http://
 -  `sbt run`,
 - look at the output in directory `facsimile_output/pages`.
 
-This demo uses settings from `configs/config.txt`.
+This demo uses settings from `configs/config.txt`. **N.b.** The build process takes a while: on a fast laptop, ~ 5 minutes per folio-side of the Venetus A manuscript.
 
 
