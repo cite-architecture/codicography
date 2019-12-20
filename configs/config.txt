@@ -7,7 +7,9 @@ htmlPath#facsimile_output/pages/
 
 // Limit the number of pages?
 // Values are an Integer; for all pages, use 0 as the limit 
-pageLimit#20
+pageLimit#5
+// Cite2Urn for surface to start with. To start at the beginning, the value should be "None" (no quotation marks), or just comment out the line.
+startAt#urn:cite2:hmt:msA.v1:12r
 
 // HTML Template files
 surfaceTemplate#templates/physical_surface.txt
@@ -17,5 +19,5 @@ jsTemplate#templates/js_template.txt
 
 // ImageStuff
 imageViewerUrl#http://www.homermultitext.org/ict2/index.html?urn=
-// Do not set the following above 2000!
-imageResolution#2000
+// Do not set the following above 2500!
+imageResolution#2500

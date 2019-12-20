@@ -48,6 +48,12 @@ h2 {
 	border-top: 1px solid silver;
 }
 
+p.facs_image_instructions {
+	font-size: 75%;
+	margin: 0.25em 1em 0 1.5em;
+	color: rgba(0,0,0,0.5);
+}
+
 .cts_progress {
 	width: 98%;
 	margin: 0 0 0 0.6em;

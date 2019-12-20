@@ -104,7 +104,19 @@ object writer {
           if (fromConf == 0) None
           else Some(fromConf)
         }
-        content.selectionSwitcher( dseVec, lib, limit ) 
+        val startAt: Option[Cite2Urn] = {
+          try {
+            val startAtStr = config.get("startAt")
+            if (startAtStr == "None") None
+            else Some(Cite2Urn(startAtStr))
+          } catch {
+            case e: Exception => {
+              println(s"startAtException")
+              None
+            }
+          }
+        }
+        content.selectionSwitcher( dseVec, lib, limit, startAt ) 
       }
 
       /* Prepare the directory */
@@ -118,6 +130,7 @@ object writer {
         // make a facs-object 
         val u: Cite2Urn = s._1
         val index: Int = s._2
+        println(s"Making page for ${u} (${index + 1} / ${surfaceUrns.size})")
         // Get metadata for page (everything we need except the content-html)
         val pm: FacsimilePageMetadata = makeFacsMetadata(u, index, surfaceUrns, colls, corp, dseVec, config.get)
         // Get the content-html
@@ -291,7 +304,7 @@ object writer {
     }
 
     // Work inside to outside
-    val surfaceHtml: String = surfTemp.replaceAll("CONTENT_HERE", facsObject.content)
+    val surfaceHtml: String = surfTemp.replaceAll("CONTENT_HERE", facsObject.content )
     val htmlPage = htmlTemp.replaceAll("LABEL_HERE", facsObject.metadata.title)
                            .replaceAll("CSS_HERE", cssTemp)
                            .replaceAll("NAV_HERE", navHtml)
@@ -300,6 +313,7 @@ object writer {
                            .replaceAll("PROGRESSBAR_HERE", progressBarHtml)
                            .replaceAll("STATS_HERE", statsHtml)
                            .replaceAll("URN_HERE", HtmlWriter.writeUrn(facsObject.metadata.urn))
+
     htmlPage
 
   }

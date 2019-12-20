@@ -1,6 +1,6 @@
 # Codicography
 
-**v.1.0.1**
+**v.1.1.0**
 
 A Scala Library, using the [CITE Architecture](http://cite-architecture.org) to generate static web views of text-bearing artifacts (like manuscripts, codices, and inscriptions).
 

@@ -17,6 +17,7 @@
 
 	NAV_HERE
 
+<p class="facs_image_instructions">Click “show image” to see visual evidence for a transcribed passage of text. Hovering over the image will enlarge it. Click an image will take you to a fully interactive zooming interface.</p>
 
 	CONTENT_HERE
 	

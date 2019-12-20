@@ -17,8 +17,9 @@ object content {
 
 
   /** For selecting a function to select surfaces */
-  def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] = Some(5) ): Vector[Cite2Urn] = {
-      getSurfaceUrns(dseVec, lib, limit)
+  def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] = Some(5), startAt: Option[Cite2Urn] = None ): Vector[Cite2Urn] = {
+      getSurfaceUrns(dseVec, lib, limit, startAt)
+      //getSurfaceUrns(dseVec, lib, limit)
   }
 
 
@@ -35,9 +36,14 @@ object content {
 	}
 
 
-
   /** Get all surfaces, in order, for a DSE Vector */
-  def getSurfaceUrns( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] ): Vector[Cite2Urn] = {
+  def getSurfaceUrns( 
+    dseVec: DseVector, 
+    lib: CiteLibrary, 
+    limit: Option[Int], 
+    startAt: Option[Cite2Urn] = None
+  ): Vector[Cite2Urn] = {
+
     val colls: Vector[Cite2Urn] = {
       dseVec.passages.map(_.surface.dropSelector).distinct
     } 
@@ -55,13 +61,30 @@ object content {
       })
     }
 
-    // Limited
-    val limitedUrns = limit match {
-      case Some(i) => urnsInDse.take(i)
-      case None => urnsInDse
+    // If we are asked to start at one of them…
+    val choppedList: Vector[Cite2Urn] = {
+      startAt match {
+        case None => {
+          urnsInDse
+        }
+        case Some(u) => {
+            val idx: Int = urnsInDse.indexOf(u)
+            val count: Int = urnsInDse.size
+            urnsInDse.takeRight( count - idx )
+        }
+      }
     }
 
+    // Limited
+    val limitedUrns = limit match {
+      case Some(i) => choppedList.take(i)
+      case None => choppedList
+    }
+
+    println("\n--------------\nSurfaces to be Rendered")
     utilities.showMe(limitedUrns)
+
+
     limitedUrns
   }
 
@@ -126,9 +149,12 @@ object content {
     // Get texts
     val surfaceTexts: Vector[Corpus] = getTextCorporaForSurface(surfaceUrn, lib, config)
 
+
     // Get images for each text-node
     val nodesAndImages: Vector[ (CatalogEntry, Vector[ (CitableNode, Option[Cite2Urn]) ] )] = {
       surfaceTexts.map( t => {
+
+        println(s"\t\tGetting image-ROIs for ${t.urns.head.dropPassage}")
 
         val catEntry: CatalogEntry = {
           val textU: CtsUrn = t.urns.head.dropPassage
@@ -136,6 +162,7 @@ object content {
         }
 
         val nodes: Vector[CitableNode] = t.nodes
+        println(s"\t\t${t.urns.head.dropPassage} = ${nodes.size} passages.")
 
         val nodeImage: Vector[ (CitableNode, Option[Cite2Urn]) ] = {
           nodes.map( n => {
@@ -154,6 +181,7 @@ object content {
                   }
               }
             }
+            println(s"\t\t\tGot: ${imageForText}")
             (n, imageForText)
           })
         }
@@ -183,7 +211,6 @@ object content {
         val imageOpenHtml = {
           cn._2 match {
             case Some(u) => {
-              println(s"\t\t\tDoing getDSEImage for ${u}")
               getDSEImage(u, lib, config)
             }
             case None => {
@@ -193,7 +220,11 @@ object content {
         }
         nodeContainerHtml + "\n" + imageOpenHtml
       }).mkString("\n")
+
+
       val htmlVec = Vector(catHtml, corpHtmlOpen, nodesHtml, corpHtmlClose)
+
+
       htmlVec.mkString("\n")
     }).mkString("\n")
     returnHtml
@@ -264,7 +295,6 @@ object content {
       val between: String = s"""\n\n<h2>Texts on Surface ${surfaceUrn.objectComponent}</h2>\n\n"""
 
       // text and image-rois
-      println(s"\tGetting text and ROIs for ${surfaceUrn}…")
       val corporaHtml: String = htmlTextAndROIs(surfaceUrn, lib, config)
 
       // Return string 
@@ -284,6 +314,7 @@ object content {
     val colls: CiteCollectionRepository = lib.collectionRepository.get
     val rels: CiteRelationSet = lib.relationSet.get
     val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
+
 
     // Get image
         // binary image model urn
