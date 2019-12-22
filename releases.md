@@ -1,5 +1,7 @@
 # `codicology`: release notes
 
+**1.1.1**: Updated the version of the `scm` library dependency.
+
 **1.1.0**: Added config for starting on a given surface; better reporting; many CSS tweaks.
 
 **1.0.1**: Speed up finding images for passages of text.
