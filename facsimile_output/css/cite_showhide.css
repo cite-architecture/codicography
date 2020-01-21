@@ -5,6 +5,7 @@ div.cite_showhide_header  {
   position: relative;
   margin: 12px;
   padding: 8px 0 5px 25px;
+  min-width: 900px;
 }
 
 div.cite_showhide_header:after {

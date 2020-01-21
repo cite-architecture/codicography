@@ -4,4 +4,6 @@
   <script type="text/javascript" src="../js/jquery.zoom.min.js"></script>
   <script type="text/javascript" src="../js/cite_preview_image.js"></script>
 	<script type="text/javascript" src="../js/cite_showhide.js"></script>
+	<script type="text/javascript" src="../js/cite_text_commentary.js"></script>
+	<script type="text/javascript" src="../js/hmt_js.js"></script>
 

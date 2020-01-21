@@ -1,5 +1,7 @@
 # `codicology`: release notes
 
+**1.2.0**: Added HMT-specific options.
+
 **1.1.1**: Updated the version of the `scm` library dependency.
 
 **1.1.0**: Added config for starting on a given surface; better reporting; many CSS tweaks.

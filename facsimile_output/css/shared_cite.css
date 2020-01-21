@@ -72,7 +72,7 @@ p.cite_surfaceUrn {
 	font-size: 85%;
 }
 
-.ohco2_commentBlock .ohco2_citableNodeContainer	{
+.ohco2_citableNodeContainer	{
 	margin-left: 3em;	
 }
 
@@ -110,7 +110,7 @@ p.cite_surfaceUrn {
 }
 
 .cite_stats {
-	margin: 0 1em 1em 1.5em;
+	margin: 4em 1em 1em 1.5em;
 	font-size: 75%;
 	font-weight: 200;
 }
@@ -122,8 +122,9 @@ p.cite_surfaceUrn {
 	font-weight: 300;
 	padding: 0.25em;
 	background-color: rgb(237, 237, 237);
-	margin: 1em 1em 0 1em;
-	padding: 1em;
+	background-color: rgba(/,.5);	
+margin: 12px;
+padding: 8px 0 5px 25px;
 	clear: both;
 }
 
@@ -222,4 +223,73 @@ span.citeobj_propertyDef_type {
 	display: none;
 }
 
+.hmtButton {
+	box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	background-color:#768d87;
+	border-radius:5px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding: 1px 10px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #2b665e;
+	margin: 20px 0 0 22px;
+}
+.hmtButton:hover {
+	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	background-color:#6c7c7c;
+}
+.hmtButton:active {
+	position:relative;
+	top:1px;
+}
 
+/* Image overlays */
+div.hmt_imageOverlay_roi {
+	position: absolute;	
+}
+
+
+div.hmt_imageOverlay_roi.hmt_scholia_0 {
+	border: 2px solid rgba(165, 127, 89,1.0);
+}
+div.hmt_imageOverlay_roi.hmt_scholia_1 {
+	border: 2px solid rgba(165, 127, 89,1.0);
+}
+
+div.hmt_imageOverlay_roi.hmt_scholia_2 {
+	border: 2px solid rgba(89, 89, 165, 0.1);
+}
+
+div.hmt_imageOverlay_roi.hmt_scholia_3 {
+	border: 2px solid rgba(18, 203, 196, 1.0);
+}
+
+div.hmt_imageOverlay_roi.hmt_scholia_4 {
+	border: 2px solid rgba(127, 165, 89,1.0);
+}
+
+div.hmt_imageOverlay_roi.hmt_scholia_5 {
+	border: 2px solid rgba(60, 99, 130,1.0);
+}
+
+div.hmt_imageOverlay_roi.hmt_scholia_6 {
+	border: 2px solid rgb(191, 63, 63);
+}
+
+#hmt_scholia_key {
+	font-size: 75%;
+	font-weight: 300;
+	text-align: center;
+}
+
+#hmt_scholia_key > span {
+	border-radius: 22px;
+	padding: 3px 5px 3px 5px;
+	font-size: 75%;
+}

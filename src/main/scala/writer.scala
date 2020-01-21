@@ -93,7 +93,13 @@ object writer {
       lazy val corp: Corpus = tr.corpus
       lazy val cat: Catalog = tr.catalog
       lazy val colls: CiteCollectionRepository = lib.collectionRepository.get
-      lazy val rels: CiteRelationSet = lib.relationSet.get
+      lazy val basicRels: CiteRelationSet = lib.relationSet.get
+      lazy val rels: CiteRelationSet = {
+        utilities.deluxeRelationSet(lib) match {
+          case Some(drs) => drs
+          case None => basicRels
+        }
+      }
       val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
 
       /* -------------------------------------- */
@@ -134,7 +140,7 @@ object writer {
         // Get metadata for page (everything we need except the content-html)
         val pm: FacsimilePageMetadata = makeFacsMetadata(u, index, surfaceUrns, colls, corp, dseVec, config.get)
         // Get the content-html
-        val contentHtml: String = content.contentSwitcher(u, lib, config.get)
+        val contentHtml: String = content.contentSwitcher(u, lib, config.get, rels)
         // Make a FacsimilePage object
         val facsPage = FacsimilePage( pm, contentHtml )
         // Assemble the whole page html

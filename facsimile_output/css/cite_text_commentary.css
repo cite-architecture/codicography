@@ -1,0 +1,239 @@
+
+div.ohco2_commentedPassage {
+	display: flex;
+	flex-direction: row ;
+	flex-wrap: wrap ;
+	align-items: center;
+	justify-content: flex-start
+}
+
+div.ohco2_commentBlock_hidden > * {
+	display: none;
+	clear: both;
+}
+
+div.ohco2_commentBlock_hidden {
+	margin-left: 0;
+}
+
+div.ohco2_commentBlock_visible {
+	margin-left: 3em;
+}
+
+div.ohco2_commentBlock_hidden::after {
+content: attr(data-commentBlockLabel);
+font-size: 76%;
+border-radius: 35px;
+margin: 0 0 0 0.5em;
+display: inline-block;
+order: 4;
+font-weight: bold;
+min-width: 2em;
+min-height: 2em;
+text-align: center;
+}
+
+div.ohco2_commentBlock_hidden.hmt_scholia_2::after, span.hmt_scholia_2 {
+	background-color: rgba(89, 89, 165,.5);	
+	border: 2px solid rgba(89, 89, 165,1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_2  .ohco2_commentBlock_close{
+	background-color: rgba(89, 89, 165,.5);	
+	border: 2px solid rgba(89, 89, 165,1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_2  .ohco2_catalogEntry, div.ohco2_commentBlock.hmt_scholia_2  .ohco2_versionCorpus {
+	background-color: rgba(89, 89, 165,.3);
+}
+
+div.ohco2_commentBlock.hmt_scholia_2  div.cite_showhide_header {
+	background-color: white;
+}
+
+div.hmt_scholia_block.hmt_scholia_2.ohco2_commentBlock_visible {
+	background-color: rgba(89, 89, 165, 0.1);
+	padding: 2em;
+}
+
+div.hmt_scholia_block.hmt_scholia_2.ohco2_commentBlock_hidden {
+	background-color: white;
+	padding: 0;
+}
+
+div.ohco2_commentBlock_hidden.hmt_scholia_1::after, span.hmt_scholia_1 {
+	background-color: rgba(165, 127, 89,.5);	
+	border: 2px solid rgba(165, 127, 89,1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_1 > .ohco2_commentBlock_close{
+	background-color: rgba(165, 127, 89,.5);	
+	border: 2px solid rgba(165, 127, 89,1.0);	
+	color: black;
+}
+
+div.hmt_scholia_block.hmt_scholia_1.ohco2_commentBlock_visible {
+	background-color: rgba(165, 127, 89, 0.1);
+	padding: 2em;
+}
+
+div.hmt_scholia_block.hmt_scholia_1.ohco2_commentBlock_hidden {
+	background-color: white;
+	padding: 0;
+}
+
+div.ohco2_commentBlock.hmt_scholia_1  .ohco2_catalogEntry, div.ohco2_commentBlock.hmt_scholia_1  .ohco2_versionCorpus {
+	background-color: rgba(165, 127, 89,.3);
+}
+
+div.ohco2_commentBlock.hmt_scholia_1  div.cite_showhide_header {
+	background-color: white;
+}
+
+div.ohco2_commentBlock_hidden.hmt_scholia_3::after, span.hmt_scholia_3 {
+	background-color: rgba(18, 203, 196,.5);	
+	border: 2px solid  rgba(18, 203, 196, 1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_3  .ohco2_catalogEntry, div.ohco2_commentBlock.hmt_scholia_3  .ohco2_versionCorpus {
+	background-color: rgba(18, 203, 196,.3);
+}
+
+div.ohco2_commentBlock.hmt_scholia_3  div.cite_showhide_header {
+	background-color: white;
+}
+
+div.ohco2_commentBlock.hmt_scholia_3 > .ohco2_commentBlock_close{
+	background-color: rgba(18, 203, 196,.5);	
+	border: 2px solid rgba(18, 203, 196,1.0);	
+	color: black;
+}
+
+div.hmt_scholia_block.hmt_scholia_3.ohco2_commentBlock_visible {
+	background-color: rgba(18, 203, 196, 0.1);
+	padding: 2em;
+}
+
+div.hmt_scholia_block.hmt_scholia_3.ohco2_commentBlock_hidden {
+	background-color: white;
+	padding: 0;
+}
+
+
+div.ohco2_commentBlock_hidden.hmt_scholia_4::after, span.hmt_scholia_4 {
+	background-color: rgba(127, 165, 89,.5);	
+	border: 2px solid  rgba(127, 165, 89,1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_4  .ohco2_catalogEntry, div.ohco2_commentBlock.hmt_scholia_4  .ohco2_versionCorpus {
+	background-color: rgba(127, 165, 89,.3);
+}
+
+div.ohco2_commentBlock.hmt_scholia_4  div.cite_showhide_header {
+	background-color: white;
+}
+
+
+div.ohco2_commentBlock.hmt_scholia_4 > .ohco2_commentBlock_close{
+	background-color: rgba(127, 165, 89,.5);	
+	border: 2px solid rgba(127, 165, 89,1.0);	
+	color: black;
+}
+
+div.hmt_scholia_block.hmt_scholia_4.ohco2_commentBlock_visible {
+	background-color: rgba(127, 165, 89, 0.1);
+	padding: 2em;
+}
+
+div.hmt_scholia_block.hmt_scholia_4.ohco2_commentBlock_hidden {
+	background-color: white;
+	padding: 0;
+}
+
+span.hmt_scholia_6 {
+	border: 2px solid rgb(191, 63, 63);
+	background-color: rgba(191, 63, 63, 0.5);
+}
+
+span.hmt_scholia_0 {
+	border: 2px solid rgba(127, 127, 127, 1.0);
+	background-color: rgba(127, 127, 127, 0.5);
+}
+
+div.ohco2_commentBlock_hidden.hmt_scholia_5::after, span.hmt_scholia_5 {
+	background-color: rgba(60, 99, 130,.5);	
+	border: 2px solid  rgba(60, 99, 130,1.0);	
+	color: black;
+}
+
+div.ohco2_commentBlock.hmt_scholia_5  .ohco2_catalogEntry, div.ohco2_commentBlock.hmt_scholia_5  .ohco2_versionCorpus {
+	background-color: rgba(60, 99, 130,.3);
+}
+
+div.ohco2_commentBlock.hmt_scholia_5  div.cite_showhide_header {
+	background-color: white;
+}
+
+div.ohco2_commentBlock.hmt_scholia_5 > .ohco2_commentBlock_close{
+	background-color: rgba(60, 99, 130,.5);	
+	border: 2px solid rgba(60, 99, 130,1.0);	
+	color: black;
+}
+
+div.hmt_scholia_block.hmt_scholia_5.ohco2_commentBlock_visible {
+	background-color: rgba(60, 99, 130, 0.1);
+	padding: 2em;
+}
+
+div.hmt_scholia_block.hmt_scholia_5.ohco2_commentBlock_hidden {
+	background-color: white;
+	padding: 0;
+}
+
+div.ohco2_commentBlock_hidden:hover::after {
+	background-color: #eee;
+}
+
+div.ohco2_commentBlock.ohco2_commentBlock_visible {
+	display: block;
+	flex-basis: 100%;
+	padding: 1em 0 0 0;
+}
+
+.ohco2_commentBlock_visible > span.ohco2_commentBlock_close {
+	  float: left;
+		margin-top: -5px;
+		margin-right: 10;
+		margin-bottom: 10px;
+		cursor: pointer;
+		color: black;
+		border: 1px solid #69626b;
+		border-radius: 40px;
+		background: rgba(0, 0, 0, 0.10);
+		font-size: 18px;
+		font-weight: bold;
+		display: inline-block;
+		line-height: 4px;
+		padding: 11px 8px;
+}
+
+.ohco2_commentBlock_visible > span.ohco2_commentBlock_close:hover {
+	background: rgba(0, 0, 0, 0.33);
+	color: white;
+}
+
+.hmt_iliad_node::before {
+	content: attr(data-urnpassage);
+	color: rgb(93, 111, 180);
+	font-size: 85%;
+	padding-right: 2em;
+}
+
+div.ohco2_commentBlock {
+	font-size: 85%;
+}

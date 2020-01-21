@@ -33,7 +33,7 @@ $(document).ready(function () {
 			if (passage == "") {
 				$(this).removeClass("ctsUrn1");
 				$(this).addClass("ctsUrn2");
-				$(this).html(us.replace(/urn:cts:[^:]+:/,""));
+				$(this).html(urnString.replace(/urn:cts:[^:]+:/,""));
 			} else {
 				$(this).html(passage);
 			}

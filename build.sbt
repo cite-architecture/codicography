@@ -1,7 +1,7 @@
 
 name := "codicography"
 
-version := "1.1.1"
+version := "1.2.0"
 
 // must be at least 2.11 to use hmt_textmodel
 scalaVersion := "2.12.8"
@@ -25,14 +25,14 @@ javaOptions in run ++= Seq(
 )
 
 libraryDependencies ++=   Seq(
-  "edu.holycross.shot.cite" %% "xcite" % "4.1.1",
-  "edu.holycross.shot" %% "ohco2" % "10.13.2",
+  "edu.holycross.shot.cite" %% "xcite" % "4.2.0",
+  "edu.holycross.shot" %% "ohco2" % "10.18.2",
   "edu.holycross.shot" %% "scm" % "7.2.0",
-  "edu.holycross.shot" %% "dse" % "5.2.2",
-  "edu.holycross.shot" %% "citebinaryimage" % "3.1.0",
-  "edu.holycross.shot" %% "citeobj" % "7.3.4",
-  "edu.holycross.shot" %% "citerelations" % "2.5.2",
-  "edu.holycross.shot" %% "cex" % "6.3.3",
+  "edu.holycross.shot" %% "dse" % "6.0.3",
+  "edu.holycross.shot" %% "citebinaryimage" % "3.1.1",
+  "edu.holycross.shot" %% "citeobj" % "7.4.0",
+  "edu.holycross.shot" %% "citerelations" % "2.6.0",
+  "edu.holycross.shot" %% "cex" % "6.4.0",
   "edu.holycross.shot" %% "greek" % "2.3.3",
   "edu.furman.classics" %% "citewriter" % "1.2.2",
   "com.github.pathikrit" %% "better-files" % "3.8.0"

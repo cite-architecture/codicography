@@ -19,7 +19,6 @@ object content {
   /** For selecting a function to select surfaces */
   def selectionSwitcher( dseVec: DseVector, lib: CiteLibrary, limit: Option[Int] = Some(5), startAt: Option[Cite2Urn] = None ): Vector[Cite2Urn] = {
       getSurfaceUrns(dseVec, lib, limit, startAt)
-      //getSurfaceUrns(dseVec, lib, limit)
   }
 
 
@@ -31,8 +30,9 @@ object content {
    *  htmlPageTextAndOverviewImage : Texts and a single overview image
    *  htmlPageOverviewTextsRois : Texts, rois, and overview
    */
-	def contentSwitcher( surfaceUrn: Cite2Urn, lib: CiteLibrary, config: Map[String, String] ): String = {
-			htmlPageOverviewTextsRois(surfaceUrn, lib, config)
+	def contentSwitcher( surfaceUrn: Cite2Urn, lib: CiteLibrary, config: Map[String, String], rels: CiteRelationSet ): String = {
+			//htmlPageOverviewTextsRois(surfaceUrn, lib, config)
+      hmt.hmtFacsimile(surfaceUrn, lib, config, rels)
 	}
 
 
@@ -168,13 +168,13 @@ object content {
           nodes.map( n => {
             val imageForText: Option[Cite2Urn] = {
               try {
-                val thisImage: Cite2Urn = dseVec.imageWRoiForText(n.urn)
-                Some(thisImage)
+                val thisImage: Option[Cite2Urn] = dseVec.imageWRoiForText(n.urn)
+                thisImage
               } catch {
                   case e: Exception => {
                     try {
-                      val thisImage: Cite2Urn = dseVec.imageWRoiForText(n.urn.collapsePassageBy(1))
-                      Some(thisImage)
+                      val thisImage: Option[Cite2Urn] = dseVec.imageWRoiForText(n.urn.collapsePassageBy(1))
+                      thisImage
                     } catch {
                       case e: Exception => None
                     }
@@ -253,7 +253,7 @@ object content {
       val corporaHtml: String = htmlPageBasicTexts(surfaceUrn, lib, config)
 
       // Get one image URN for this page 
-      val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
+      val imageUrn: Option[Cite2Urn] = dseVec.imageForTbs(surfaceUrn)
 
       // Get image
       val imageHtml = getOverviewImageHtml(surfaceUrn, lib, config)
@@ -286,7 +286,7 @@ object content {
       val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
 
       // Get one image URN for this page 
-      val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
+      val imageUrn: Option[Cite2Urn] = dseVec.imageForTbs(surfaceUrn)
 
       // Get image
       val imageHtml = getOverviewImageHtml(surfaceUrn, lib, config)
@@ -373,37 +373,57 @@ object content {
     val dseVec: DseVector = DseVector.fromCiteLibrary(lib)
 
     // Get one image URN for this page 
-    val imageUrn: Cite2Urn = dseVec.imageForTbs(surfaceUrn)
+    val imageUrnOption: Option[Cite2Urn] = dseVec.imageForTbs(surfaceUrn)
 
-    // Get image
-        // binary image model urn
-    val bim = Cite2Urn("urn:cite2:hmt:binaryimg.v1:") 
-        // get objects
-    val bimObjs: Vector[CiteObject] = colls ~~ bim
-    val bimCollProperty: Cite2Urn = bim.addProperty("collection")
-    val bimProtocolProperty: Cite2Urn = bim.addProperty("protocol")
-    val matchingBimObject: CiteObject = {
-      bimObjs.filter( c => { 
-        c.propertyValue(bimCollProperty) == imageUrn.dropSelector 
-      }).filter( c => {
-        c.propertyValue(bimProtocolProperty) == "iiifApi"
-      }).head
-    }
+    val imageThumbHtml: String = {
+      imageUrnOption match {
+        case Some(imageUrn) => {
+          // Get image
+              // binary image model urn
+          val bim = Cite2Urn("urn:cite2:hmt:binaryimg.v1:") 
+              // get objects
+          val bimObjs: Vector[CiteObject] = colls ~~ bim
+          val bimCollProperty: Cite2Urn = bim.addProperty("collection")
+          val bimProtocolProperty: Cite2Urn = bim.addProperty("protocol")
+          val matchingBimObject: CiteObject = {
+            bimObjs.filter( c => { 
+              c.propertyValue(bimCollProperty) == imageUrn.dropSelector 
+            }).filter( c => {
+              c.propertyValue(bimProtocolProperty) == "iiifApi"
+            }).head
+          }
 
-    val pathPropUrn: Cite2Urn  = matchingBimObject.urn.addProperty("path")
-    val path: String = matchingBimObject.propertyValue(pathPropUrn).asInstanceOf[String]
-    val urlPropUrn: Cite2Urn = matchingBimObject.urn.addProperty("url")
-    val url: String = matchingBimObject.propertyValue(urlPropUrn).asInstanceOf[String]
-    val imgService =  IIIFApi(url, path)
-    val imageViewerUrl:String = config("imageViewerUrl")
-    // how high the image resolution should be
-    val overviewWidth: Int = config("imageResolution").toInt
-    val imageThumbHtml: String = imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
+          val pathPropUrn: Cite2Urn  = matchingBimObject.urn.addProperty("path")
+          val path: String = matchingBimObject.propertyValue(pathPropUrn).asInstanceOf[String]
+          val urlPropUrn: Cite2Urn = matchingBimObject.urn.addProperty("url")
+          val url: String = matchingBimObject.propertyValue(urlPropUrn).asInstanceOf[String]
+          val imgService =  IIIFApi(url, path)
+          val imageViewerUrl:String = config("imageViewerUrl")
+          // how high the image resolution should be
+          val overviewWidth: Int = config("imageResolution").toInt
+          imgService.linkedHtmlImage(u = imageUrn, maxWidth = Some(overviewWidth), viewerUrl = imageViewerUrl)
+        }
+        case None => {
+          s"""<span class="cite_no_image_found">No Image Found for ${surfaceUrn}.</span>"""
+        }
+      }
+    } // end imageThumbHtml
+
+   
 
     // Get image metadata
-    val imgObj = (colls ~~ imageUrn).head
-    val imgCat = (colls.catalog ~~ imageUrn).collections.head
-    val imageMetadataHtml = HtmlWriter.writeCiteObject(imgObj, imgCat)
+    val imageMetadataHtml: String = {
+      imageUrnOption match {
+        case Some(imageUrn) => {
+          val imgObj = (colls ~~ imageUrn).head
+          val imgCat = (colls.catalog ~~ imageUrn).collections.head
+          HtmlWriter.writeCiteObject(imgObj, imgCat)
+        }
+        case None => {
+          ""
+        }
+      }
+    }
     val imageHtml = s"""
     <div class="cite_image_overview">
         <div class="cite_image_thumb">${imageThumbHtml}</div>
