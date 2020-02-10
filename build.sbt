@@ -25,7 +25,7 @@ javaOptions in run ++= Seq(
 )
 
 libraryDependencies ++=   Seq(
-  "edu.holycross.shot.cite" %% "xcite" % "4.2.0",
+  "edu.holycross.shot.cite" %% "xcite" % "4.2.1",
   "edu.holycross.shot" %% "ohco2" % "10.18.2",
   "edu.holycross.shot" %% "scm" % "7.2.0",
   "edu.holycross.shot" %% "dse" % "6.0.3",

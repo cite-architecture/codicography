@@ -73,7 +73,6 @@ $(document).ready(function () {
 		}
 	
 		pollDOM();
-	
 
 	$(".cite_preview_image").mouseenter(function(){
 			$(".hmt_imageOverlay_roi").hide();
@@ -82,6 +81,21 @@ $(document).ready(function () {
 	$(".cite_preview_image").mouseleave(function(){
 			$(".hmt_imageOverlay_roi").show();
 	});
+
+	$("#hmtZoomImage").click( function() {
+		if( $(this).is(":checked") ) {
+			$('.cite_preview_image').zoom();
+			$(".cite_preview_image").removeClass("noZoom");
+		} else {
+			$(".cite_preview_image").trigger("zoom.destroy"); // remove zoom
+			$(".cite_preview_image").addClass("noZoom");
+		}
+	});
+
+	// Start by turning zooming off
+			$(".cite_preview_image").trigger("zoom.destroy"); // remove zoom
+			$(".cite_preview_image").addClass("noZoom");
+
 
 
 })

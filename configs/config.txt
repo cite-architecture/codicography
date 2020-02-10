@@ -1,13 +1,13 @@
 
 // Path to CEX file
-cexPath#cex/hmt-2020c.cex
+cexPath#cex/hmt-2020g.cex
 
 // Where to put pages
 htmlPath#facsimile_output/pages/
 
 // Limit the number of pages?
 // Values are an Integer; for all pages, use 0 as the limit 
-pageLimit#10
+pageLimit#0
 // Cite2Urn for surface to start with. To start at the beginning, the value should be "None" (no quotation marks), or just comment out the line.
 startAt#urn:cite2:hmt:msA.v1:12r
 

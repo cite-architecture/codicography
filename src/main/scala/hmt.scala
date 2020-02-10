@@ -56,9 +56,11 @@ object hmt {
           s"""<span class="hmt_scholia_3">${urnToScholiaLabel("msAil")}</span>""",
           s"""<span class="hmt_scholia_4">${urnToScholiaLabel("msAim")}</span>""",
           s"""<span class="hmt_scholia_5">${urnToScholiaLabel("msAint")}</span>""",
-          s"""<span class="hmt_scholia_0">Uncategorized</span></div>\n""")
+          s"""<span class="hmt_scholia_0">Uncategorized</span></div>""")
         stringVec.mkString(" ")
       }
+
+      //s""" <a id="hmt_citeAppLink" target=_blank href="http://www.homermultitext.org/hmt-digital/index.html?urn=${imageUrn.getOrElse("")}">Interactive CITE-App for this folio</a></div>"""
 
       // The meat of the content is here
       val corporaHtml: String = hmtIliadText(surfaceUrn, lib, config, rels)
@@ -166,13 +168,14 @@ object hmt {
       scholiaTexts.diff(usedScholia)
     } 
 
-    println(s"Unmatched Scholia")
     utilities.showMe(leftoverScholia)
 
     // Sort IliadLines
     val sortedIliadMap: Vector[CtsUrn] = {
       corp.sortPassages(iliadTexts)
     }
+
+    utilities.showMe(sortedIliadMap)
 
     /* for each Iliad line…
        … turn the scholia into a Vector[Corpus]
@@ -184,7 +187,7 @@ object hmt {
           corp.nodes.filter( n =>  sortedScholiaUrns.contains(n.urn))
         )
         val dividedCorps: Vector[Corpus] = allScholiaCorp.chunkByText.sortBy( c => {
-          c.nodes.head.urn.workOption.getOrElse("_")
+            c.nodes.head.urn.workOption.getOrElse("_")
         })
         (il, dividedCorps)
       })
@@ -194,7 +197,13 @@ object hmt {
     val between: String = s"""\n\n<h2>Texts on Folio ${surfaceUrn.objectComponent}</h2>\n\n"""
 
     // Write IliadLines
-    val iliadHtml: String = getIliadHtml(fleshedOutScholia, surfaceUrn, lib, config)
+    val iliadHtml: String = {
+      if (fleshedOutScholia.size > 0) {
+        getIliadHtml(fleshedOutScholia, surfaceUrn, lib, config)
+      } else {
+        s"<h2>No <i>Iliad</i> text found for ${surfaceUrn}."
+      }
+    }
 
     // Write leftoverScholia
     val leftoverScholaHtml: String = {
@@ -207,7 +216,7 @@ object hmt {
           val littleCorp: Corpus = corp ~~ los
           littleCorp.nodes.map( lcn => {
             nodeAndImage(lcn, lib, config)
-          })
+          }).mkString("\n")
         }).mkString("\n")
         opener + leftoverNodes
       }
@@ -239,7 +248,6 @@ object hmt {
     }
 
     val iliadLines: String = {
-      println(s"\t\t${textMap.size} Iliad lines.")
       textMap.map( tm => {
         val n: Option[CitableNode] = corp.nodes.find(_.urn == tm._1)
         n match {
@@ -448,7 +456,10 @@ object hmt {
   }
 
   def  showAllButton: String = {
-    """<span class="hmtButton" id="hmt_showAllButton">Show Everything</span>"""
+    """
+<span class="hmtButton" id="hmt_showAllButton">Show Everything</span>
+<input type="checkbox" name="hmtZoomImage" id="hmtZoomImage" ><label for="hmtZoomImage">Zoom Images on Hover</label></input>
+"""
   }
 
   def imageMapJS(imgMap: Vector[(String, Vector[(String, String, String, String)])]):String = {

@@ -293,3 +293,24 @@ div.hmt_imageOverlay_roi.hmt_scholia_6 {
 	padding: 3px 5px 3px 5px;
 	font-size: 75%;
 }
+
+.cite_preview_image.noZoom:after {
+	background-image: none;
+}
+
+input[type=checkbox] {
+	margin-left: 3em;
+	height: 15px;
+	width: 15px;
+}
+
+label {
+	font-weight: 300;
+	font-size: 75%;
+	margin-left: 0.5em;
+	position: relative;
+}
+
+#hmt_citeAppLink {
+	margin-left: 4em;
+}

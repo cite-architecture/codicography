@@ -53,7 +53,7 @@ $(document).ready(function () {
 			$(this).addClass("ctsUrn0");
 			$(this).html("cts");
 		}
-
+		return false;
 	});
 
 $(".cite2urn").dblclick(function(){ 
